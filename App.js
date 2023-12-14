@@ -1,18 +1,37 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './src/components/HomeScreen';
+import { ActivityIndicator } from 'react-native';
+import CategoriesScreen from './src/screen/CategoriesScreen'
+import ProductsByCategoryScreen from './src/screen/ProductsByCategoryScreen';
+import {useFonts} from 'expo-font'
+import { useState } from 'react';
 
-const Stack = createStackNavigator();
+export default function App() {
+  const [categorySelected, setCategorySelected] = useState('')
 
-const App = () => {
+  const [fontLoaded] = useFonts({
+    'Karla-Regular': require('./assets/fonts/Karla-Regular.ttf'),
+    'Karla-Bold': require('./assets/fonts/Karla-Bold.ttf'),
+    'Karla-Italic': require('./assets/fonts/Karla-Italic.ttf')
+  })
+
+  if(!fontLoaded) return <ActivityIndicator/>
+
+  const onSelectCategory = (category) => {
+    setCategorySelected(category);
+  }
+
+  const onReturnHome = () =>{
+    setCategorySelected('')
+  }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Comision 56680" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+    {
+      categorySelected
+       ?
+       <ProductsByCategoryScreen category={categorySelected} returnHomeHandlerEvent={onReturnHome}/>
+       :
+       <CategoriesScreen onSelectCategoryEvent={onSelectCategory} />
+    }
+    </>
   );
-};
-
-export default App;
+}
