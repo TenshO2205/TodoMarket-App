@@ -1,15 +1,15 @@
 import { FlatList, StyleSheet } from 'react-native'
 import products_data from '../data/products_data.json'
 import ProductItem from '../components/ProductItem'
-import Header from '../components/Header'
 import { useState, useEffect } from 'react'
 import Search from '../components/Search'
 import {colors} from '../global/colors'
 
-const ProductsByCategoryScreen = ({category, returnHomeHandlerEvent}) => {
+const ProductsByCategoryScreen = ({ navigation, route }) => {
 
   const [productsByCategory, setProductsByCategory] = useState([])
   const [search, setSearch] = useState('')
+  const {category} = route.params
 
   useEffect(() => {
     const productFilterByCategory = products_data.filter(product=>product.category===category)
@@ -18,7 +18,7 @@ const ProductsByCategoryScreen = ({category, returnHomeHandlerEvent}) => {
   },[category, search])
 
   const renderProductItem = ({item}) => (
-    <ProductItem product={item} />
+    <ProductItem product={item} navigation={navigation}/>
   )
 
   const onSearch = (search) => {
@@ -26,7 +26,6 @@ const ProductsByCategoryScreen = ({category, returnHomeHandlerEvent}) => {
   }
   return (
     <>
-      <Header tittle='Productos' returnHomeHandlerEvent={returnHomeHandlerEvent}/>
       <Search onSearchHandlerEvent={onSearch}/>
       <FlatList
       style={styles.listWrapper}

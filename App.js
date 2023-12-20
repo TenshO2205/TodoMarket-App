@@ -1,11 +1,11 @@
 import { ActivityIndicator } from 'react-native';
-import CategoriesScreen from './src/screen/CategoriesScreen'
-import ProductsByCategoryScreen from './src/screen/ProductsByCategoryScreen';
+import Navigator from './src/navigation/Navigator';
 import {useFonts} from 'expo-font'
 import { useState } from 'react';
 
 export default function App() {
   const [categorySelected, setCategorySelected] = useState('')
+  const [productIdSelected, setProductIdSelected] = useState(null)
 
   const [fontLoaded] = useFonts({
     'Karla-Regular': require('./assets/fonts/Karla-Regular.ttf'),
@@ -19,19 +19,13 @@ export default function App() {
     setCategorySelected(category);
   }
 
-  const onReturnHome = () =>{
-    setCategorySelected('')
+  const onSelectProductId = (productId) => {
+    setProductIdSelected(productId)
   }
 
   return (
-    <>
-    {
-      categorySelected
-       ?
-       <ProductsByCategoryScreen category={categorySelected} returnHomeHandlerEvent={onReturnHome}/>
-       :
-       <CategoriesScreen onSelectCategoryEvent={onSelectCategory} />
-    }
-    </>
+
+    <Navigator/>
+
   );
 }

@@ -1,15 +1,22 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import {colors} from '../global/colors'
 import { AntDesign } from '@expo/vector-icons'
 
-const header = ({tittle, returnHomeHandlerEvent}) => {
+const header = ({ tittle, navigation }) => {
   return (
     <View style={styles.container}>
+      {
+        navigation.canGoBack()
+        &&
+        (<TouchableOpacity onPress={navigation.goBack}>
+          <AntDesign name="arrowleft" size={24} color="black" />
+        </TouchableOpacity>
+        )}
+        {
+          !navigation.canGoBack() && <View />
+        }
       <Text style={styles.headerTittle}>{tittle}</Text>
-      <Pressable onPress={returnHomeHandlerEvent}>
-      <AntDesign name="home" size={24} color="black" />
-      </Pressable>
     </View>
   )
 }
@@ -20,7 +27,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
         height: 100,
         justifyContent: 'space-between',
-        alignItems:'flex-end',
+        alignItems:'center',
         backgroundColor: colors.headerColor,
         paddingHorizontal:20,
         paddingBottom:10,
@@ -28,5 +35,7 @@ const styles = StyleSheet.create({
     headerTittle: {
         fontFamily: 'Karla-Bold',
         fontSize: 17,
+        marginLeft: 'auto',
+        marginRight:'auto'
     }
 })
