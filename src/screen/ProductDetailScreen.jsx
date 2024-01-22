@@ -2,12 +2,16 @@ import { ActivityIndicator, StyleSheet, Text, View, Image, TouchableOpacity, Scr
 import products_data from '../data/products_data.json'
 import { useEffect, useState } from 'react'
 import { colors } from '../global/colors'
+import { addItem } from '../features/cartSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { setProductIdSelected } from '../features/shopSlice'
 
 const ProductDetailScreen = ({ route }) => {
 
   const [productSelected, setProductSelected] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [isPortrait, setIsPortrait] = useState(true)
+
   const {height, width} = useWindowDimensions()
 
   const productId = route.params
@@ -21,6 +25,13 @@ const ProductDetailScreen = ({ route }) => {
     setProductSelected(productFound)
     setIsLoading(false)
   },[productId])
+
+  const dispatch = useDispatch()
+
+  const onAddToCart = () =>{
+    dispatch(addItem({...productSelected, quantity: 1}))
+  }
+
 
   return (
     <>
@@ -40,8 +51,8 @@ const ProductDetailScreen = ({ route }) => {
           <Text style={styles.title}>{productSelected.title}</Text>
           <Text style={styles.description}>{productSelected.description}</Text>
           <Text style={styles.price}>$ {productSelected.price}</Text>
-          <TouchableOpacity style={isPortrait ? styles.buyButton : styles.buyAlt} onPress={() => null}>
-            <Text style={styles.buyText}>Comprar</Text>
+          <TouchableOpacity style={isPortrait ? styles.buyButton : styles.buyAlt} onPress={onAddToCart}>
+            <Text style={styles.buyText}>Agregar al carrito</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
